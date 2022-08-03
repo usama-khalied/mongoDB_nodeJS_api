@@ -70,8 +70,7 @@ app.put('/update:id',async(req,res) => {
               else {
                  res.send(data)
               }
-        }
-      
+        }  
      })
-})
+});
 
