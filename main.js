@@ -74,12 +74,12 @@ app.put('/update/:id',async(req,res) => {
 });
 
 // Fetch mathod 
-app.get("/fetch:id",(req,res) => {
-    fetchID = req.params.ID;
+app.get("/fetch/:id",(req,res) => {
+    fetchID = req.params.id;
   
     monmodel.find(({ID:fetchID}), function(err,val){
         // res.send("Hellow")
-        res.send(fetchID);
+        res.send(val);
      
     })
 })
