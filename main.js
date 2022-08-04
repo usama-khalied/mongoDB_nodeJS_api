@@ -46,8 +46,7 @@ app.listen(3000,() => {
 
 // get method
 app.get('/view',(req,res) => {
-    console.log("get Data is successfull");
-    res.send("Get Data is completed");
+    res.send("Hellow world");
 });
 
 
