@@ -52,7 +52,7 @@ app.get('/view',(req,res) => {
 
 
 // put method
-app.put('/update:id',async(req,res) => {
+app.put('/update/:id',async(req,res) => {
      let updateID = req.params.ID;
      let updateName = req.body.name;
      let updateEmail = req.body.email;
