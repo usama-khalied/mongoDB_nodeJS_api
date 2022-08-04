@@ -79,7 +79,16 @@ app.get("/fetch/:id",(req,res) => {
   
     monmodel.find(({ID:fetchID}), function(err,val){
         // res.send("Hellow")
-        res.send(val);
-     
+        if(err) {
+            res.send("ERROR")
+        }
+        else{
+            if(!val) {
+                res.send("ERROR")
+            }
+         else {
+            res.send(val)
+         }
+        }
     })
 })
