@@ -97,7 +97,18 @@ app.get("/fetch/:id",(req,res) => {
 app.delete('/del/:id',function (req,res) {
 let delID = req.params.id;
 monmodel.findOneAndDelete(({id:delID}),function(err,docs){
- res.send(docs)
+    if(err) {
+        res.send("ERROR");
+    }
+    else {
+
+        if(docs==null) {
+            res.send("WRONG ID")
+            }
+            else {
+                res.send("Deleted");
+            } 
+    }
 })
  
 }) 
