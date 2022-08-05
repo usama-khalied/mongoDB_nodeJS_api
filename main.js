@@ -83,7 +83,7 @@ app.get("/fetch/:id",(req,res) => {
             res.send("ERROR")
         }
         else {
-            if(val==null){
+            if(val.length==0){
                 res.send("nothing found"); 
               }
               else {
@@ -95,10 +95,22 @@ app.get("/fetch/:id",(req,res) => {
 
 // Delete Method
 app.delete('/del/:id',function (req,res) {
- delID = req.params.id;
-mongoose.findOneAndDelete(({id:delID}),function(err,docs){
- if(!docs) {
+let delID = req.params.ID;
+mongoose.findOneAndDelete((
+    {
+        id:delID
+    }
+    ),function(err,docs){
+ if(err) {
     res.send("Delete Method is not working")
+ }
+ else {
+    if(val.length==0) {
+        res.send("Wrong ID");
+    }
+    else {
+        res.send(docs);
+    }
  }
 })
  
