@@ -95,23 +95,9 @@ app.get("/fetch/:id",(req,res) => {
 
 // Delete Method
 app.delete('/del/:id',function (req,res) {
-let delID = req.params.ID;
-mongoose.findOneAndDelete((
-    {
-        id:delID
-    }
-    ),function(err,docs){
- if(err) {
-    res.send("Delete Method is not working")
- }
- else {
-    if(val.length==0) {
-        res.send("Wrong ID");
-    }
-    else {
-        res.send(docs);
-    }
- }
+let delID = req.params.id;
+monmodel.findOneAndDelete(({id:delID}),function(err,docs){
+ res.send(docs)
 })
  
 }) 
