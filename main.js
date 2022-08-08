@@ -23,7 +23,12 @@ mongoose.connect("mongodb://localhost:27017/mynewdb",{
 const sch = {
     name:String,
     email:String,
-    ID:Number
+    ID:Number,
+    phone:String,
+    address:String,
+    oid:String,
+    price:Number,
+    qty:Number
 }
 const monmodel = mongoose.model("NEWCOL",sch);
 
@@ -32,9 +37,14 @@ const monmodel = mongoose.model("NEWCOL",sch);
 app.post("/post",async(req,res) => {
     console.log("inside post function");
     const data = new monmodel({
+        ID:req.body.ID,
         name:req.body.name,
         email:req.body.email,
-        ID:req.body.ID
+        phone:req.body.phone,
+        address:req.body.address,
+        oid:req.body.oid,
+        price:req.body.price,
+        qty:req.body.qty
     });
     const val = await data.save();
     res.send(data)
@@ -55,9 +65,21 @@ app.put('/update/:id',async(req,res) => {
      let updateID = req.params.ID;
      let updateName = req.body.name;
      let updateEmail = req.body.email;
+     let updatePhone = req.body.phone;
+     let updateAddress = req.body.address;
+     let updateOid     = req.body.oid;
+     let updatePrice = req.body.price;
+     let updateQty = req.body.qty;
      monmodel.findOneAndUpdate({
         id:updateID
-     },{$set:{name:updateName,email:updateEmail}}
+     },{$set:{name:updateName,
+        email:updateEmail,
+        phone:updatePhone,
+        address:updateAddress,
+        oid:updateOid,
+        price:updatePrice,
+        qty:updateQty
+    }}
      ,{new:true},(err,data) => {
         if(err) {
             res.send("ERROR")
