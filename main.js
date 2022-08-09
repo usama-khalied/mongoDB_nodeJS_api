@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+var cors = require('cors');
 app.use(express.json());
-
+app.use(cors())
 
 // Connect operation
 mongoose.connect("mongodb://localhost:27017/mynewdb",{
@@ -78,7 +79,8 @@ app.put('/update/:id',async(req,res) => {
         address:updateAddress,
         oid:updateOid,
         price:updatePrice,
-        qty:updateQty
+        qty:updateQty,
+        id:updateID
     }}
      ,{new:true},(err,data) => {
         if(err) {
