@@ -17,7 +17,19 @@ mongoose.connect("mongodb://localhost:27017/mynewdb",{
      else {
         console.log("Db is not connected")
      }
-})
+});
+
+const conn = mongoose.createConnection('mongodb://localhost/testA', {
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+}, (err) => {
+    if(!err) {
+        console.log("Data ID is  connected");
+    }
+    else {
+        console.log("Data ID is not connected ")
+    }
+});
 
 
 // Creating schema
@@ -132,3 +144,4 @@ monmodel.findOneAndDelete(({oid:delID}),function(err,docs){
 })
 
 })
+
