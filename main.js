@@ -8,7 +8,7 @@ app.use(cors())
 // Connect operation
 mongoose.connect("mongodb://localhost:27017/mynewdb",{
     useNewUrlParser:true,
-    useUnifiedTopology:true,  
+    useUnifiedTopology:true,
 }, (err) => {
      if(!err) {
         console.log("Database is connected");
@@ -17,17 +17,16 @@ mongoose.connect("mongodb://localhost:27017/mynewdb",{
      else {
         console.log("Db is not connected")
      }
-}) 
+})
 
 
-// Creating schema 
+// Creating schema
 const sch = {
     name:String,
     email:String,
-    ID:Number,
     phone:String,
     address:String,
-    oid:String,
+    oid:Number,
     price:Number,
     qty:Number
 }
@@ -38,7 +37,6 @@ const monmodel = mongoose.model("NEWCOL",sch);
 app.post("/post",async(req,res) => {
     console.log("inside post function");
     const data = new monmodel({
-        ID:req.body.ID,
         name:req.body.name,
         email:req.body.email,
         phone:req.body.phone,
@@ -62,8 +60,7 @@ app.get('/view',(req,res) => {
 
 
 // put method
-app.put('/update/:id',async(req,res) => {
-     let updateID = req.params.ID;
+app.put('/update/:oid',async(req,res) => {
      let updateName = req.body.name;
      let updateEmail = req.body.email;
      let updatePhone = req.body.phone;
@@ -80,7 +77,6 @@ app.put('/update/:id',async(req,res) => {
         oid:updateOid,
         price:updatePrice,
         qty:updateQty,
-        id:updateID
     }}
      ,{new:true},(err,data) => {
         if(err) {
@@ -88,39 +84,39 @@ app.put('/update/:id',async(req,res) => {
         }
         else {
             if(data==null){
-                res.send("nothing found"); 
+                res.send("nothing found");
               }
               else {
                  res.send(data)
               }
-        }  
+        }
      })
 });
 
-// Fetch mathod 
-app.get("/fetch/:id",(req,res) => {
-    fetchID = req.params.id;
-  
-    monmodel.find(({ID:fetchID}), function(err,val){
+// Fetch mathod
+app.get("/fetch/:oid",(req,res) => {
+    fetchID = req.params.oid;
+
+    monmodel.find(({OID:fetchID}), function(err,val){
         // res.send("Hellow")
         if(err) {
             res.send("ERROR")
         }
         else {
             if(val.length==0){
-                res.send("nothing found"); 
+                res.send("nothing found");
               }
               else {
                  res.send(val)
               }
-        }  
+        }
     })
 })
 
 // Delete Method
-app.delete('/del/:id',function (req,res) {
-let delID = req.params.id;
-monmodel.findOneAndDelete(({id:delID}),function(err,docs){
+app.delete('/del/:oid',function (req,res) {
+let delID = req.params.oid;
+monmodel.findOneAndDelete(({oid:delID}),function(err,docs){
     if(err) {
         res.send("ERROR");
     }
@@ -131,8 +127,8 @@ monmodel.findOneAndDelete(({id:delID}),function(err,docs){
             }
             else {
                 res.send("Deleted");
-            } 
+            }
     }
 })
- 
-}) 
+
+})
