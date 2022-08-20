@@ -69,12 +69,12 @@ app.put('/update/:oid',async(req,res) => {
      let updatePrice = req.body.price;
      let updateQty = req.body.qty;
      monmodel.findOneAndUpdate({
-        id:updateID
-     },{$set:{name:updateName,
+        oid:updateOid
+     },{$set:{
+        name:updateName,
         email:updateEmail,
         phone:updatePhone,
         address:updateAddress,
-        oid:updateOid,
         price:updatePrice,
         qty:updateQty,
     }}
