@@ -42,6 +42,10 @@ const sch = {
     price:Number,
     qty:Number
 }
+const sch2 = {
+    genearateID:Number
+}
+const monmodelId = mongoose.model("DataId",sch2);
 const monmodel = mongoose.model("NEWCOL",sch);
 
 
@@ -63,6 +67,27 @@ app.post("/post",async(req,res) => {
 app.listen(3000,() => {
     console.log("on Port 3000")
 });
+
+
+
+// Post ID
+app.post("/postId",async(req,res) => {
+    console.log("inside post function");
+    const data1 = new monmodelId({
+        genrateId: req.body.genearateID
+    });
+    const val1 = await data.save();
+    res.send(data)
+});
+app.listen(3000,() => {
+    console.log("on Port 3000 ID")
+});
+
+
+
+
+
+
 
 
 // get method
