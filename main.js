@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 var cors = require('cors');
+var router =  express.Router()
 app.use(express.json());
 app.use(cors())
 
@@ -94,9 +95,8 @@ app.listen(3000,() => {
 app.get('/view',(req,res) => {
     res.send("Hellow world");
 });
-app.get('/viewid',(req,res) => {
-    res.send("data1")
-});
+
+
 
 // put method
 app.put('/update/:oid',async(req,res) => {
@@ -132,6 +132,21 @@ app.put('/update/:oid',async(req,res) => {
      })
 });
 
+app.get("/viewid",(req,res) => {
+    monmodelId.find({} ,function(err,data) {
+        if(err) {
+            res.send("ERROR ID")
+        }
+        else {
+            if(data.length == 0) {
+                res.send("Nothing found id")
+            }
+            else {
+                res.send(data)
+            }
+        }
+    })
+})
 // Fetch mathod
 app.get("/fetch/:oid",(req,res) => {
     fetchID = req.params.oid;
