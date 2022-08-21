@@ -64,20 +64,20 @@ app.post("/post",async(req,res) => {
     const val = await data.save();
     res.send(data)
 });
-app.listen(3000,() => {
+app.listen(4000,() => {
     console.log("on Port 3000")
 });
 
 
 
 // Post ID
-app.post("/postId",async(req,res) => {
-    console.log("inside post function");
+app.post("/postid",async(req,res) => {
+    console.log("inside post id function");
     const data1 = new monmodelId({
-        genrateId: req.body.genearateID
+        genearateID: req.body.genearateID
     });
-    const val1 = await data.save();
-    res.send(data)
+    const val1 = await data1.save();
+    res.send(data1)
 });
 app.listen(3000,() => {
     console.log("on Port 3000 ID")
@@ -94,7 +94,9 @@ app.listen(3000,() => {
 app.get('/view',(req,res) => {
     res.send("Hellow world");
 });
-
+app.get('/viewid',(req,res) => {
+    res.send("data1")
+});
 
 // put method
 app.put('/update/:oid',async(req,res) => {
