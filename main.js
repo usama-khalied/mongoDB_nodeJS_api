@@ -1,25 +1,33 @@
+
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose");
 var cors = require('cors');
 var router =  express.Router()
 app.use(express.json());
 app.use(cors())
+const mongoose = require("mongoose");
 
-// Connect operation
+
+const sch = require("./asset/user");
+const sch2 = require("./asset/userID")
+
+
+// Connect operation Start Part 1 
 mongoose.connect("mongodb://localhost:27017/mynewdb",{
     useNewUrlParser:true,
     useUnifiedTopology:true,
 }, (err) => {
      if(!err) {
         console.log("Database is connected");
-
      }
      else {
         console.log("Db is not connected")
      }
 });
+// Connect operation Close Part 1 
 
+
+// Connect operation Start Part 2. generate Random ID sequence wise
 const conn = mongoose.createConnection('mongodb://localhost/testA', {
     useNewUrlParser:true,
     useUnifiedTopology:true
@@ -31,26 +39,16 @@ const conn = mongoose.createConnection('mongodb://localhost/testA', {
         console.log("Data ID is not connected ")
     }
 });
+// Connect operation Close Part 2. generate Random ID sequence wise
 
 
-// Creating schema
-const sch = {
-    name:String,
-    email:String,
-    phone:String,
-    address:String,
-    oid:Number,
-    price:Number,
-    qty:Number
-}
-const sch2 = {
-    genearateID:Number
-}
+// connecting Module to Schema Start
 const monmodelId = mongoose.model("DataId",sch2);
 const monmodel = mongoose.model("NEWCOL",sch);
+// connecting Module to Schema End
 
 
-// post operation
+// post operation User Start
 app.post("/post",async(req,res) => {
     console.log("inside post function");
     const data = new monmodel({
@@ -68,10 +66,11 @@ app.post("/post",async(req,res) => {
 app.listen(4000,() => {
     console.log("on Port 3000")
 });
+// post operation User End
 
 
 
-// Post ID
+// Post Operation UserID Start
 app.post("/postid",async(req,res) => {
     console.log("inside post id function");
     const data1 = new monmodelId({
@@ -83,22 +82,17 @@ app.post("/postid",async(req,res) => {
 app.listen(3000,() => {
     console.log("on Port 3000 ID")
 });
+// Post Operation UserID End
 
 
-
-
-
-
-
-
-// get method
+// Get Operation User Start
 app.get('/view',(req,res) => {
     res.send("Hellow world");
 });
+// Get Operation User End
 
 
-
-// put method
+// Update Operation User Start
 app.put('/update/:oid',async(req,res) => {
      let updateName = req.body.name;
      let updateEmail = req.body.email;
@@ -131,7 +125,10 @@ app.put('/update/:oid',async(req,res) => {
         }
      })
 });
+// Update Operation User End
 
+
+// Get Operation UserID Start
 app.get("/viewid",(req,res) => {
     monmodelId.find({} ,function(err,data) {
         if(err) {
@@ -146,8 +143,11 @@ app.get("/viewid",(req,res) => {
             }
         }
     })
-})
-// Fetch mathod
+});
+// Get Operation UserID End
+
+
+// Get Operation User FetchID Start
 app.get("/fetch/:oid",(req,res) => {
     fetchID = req.params.oid;
 
@@ -166,8 +166,10 @@ app.get("/fetch/:oid",(req,res) => {
         }
     })
 })
+// Get Operation User FetchID End
 
-// Delete Method
+
+// Delete Operation User DeleteID Start
 app.delete('/del/:oid',function (req,res) {
 let delID = req.params.oid;
 monmodel.findOneAndDelete(({oid:delID}),function(err,docs){
@@ -184,6 +186,6 @@ monmodel.findOneAndDelete(({oid:delID}),function(err,docs){
             }
     }
 })
-
-})
+});
+// Delete Operation User DeleteID End
 
