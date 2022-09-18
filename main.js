@@ -12,7 +12,7 @@ const sch = require("./asset/user");
 const sch2 = require("./asset/userID")
 
 
-// Connect operation Start Part 1 
+// Connect operation Start Part 1
 mongoose.connect("mongodb://localhost:27017/mynewdb",{
     useNewUrlParser:true,
     useUnifiedTopology:true,
@@ -24,26 +24,14 @@ mongoose.connect("mongodb://localhost:27017/mynewdb",{
         console.log("Db is not connected")
      }
 });
-// Connect operation Close Part 1 
+// Connect operation Close Part 1
 
 
-// Connect operation Start Part 2. generate Random ID sequence wise
-const conn = mongoose.createConnection('mongodb://localhost/testA', {
-    useNewUrlParser:true,
-    useUnifiedTopology:true
-}, (err) => {
-    if(!err) {
-        console.log("Data ID is  connected");
-    }
-    else {
-        console.log("Data ID is not connected ")
-    }
-});
-// Connect operation Close Part 2. generate Random ID sequence wise
+
 
 
 // connecting Module to Schema Start
-const monmodelId = mongoose.model("DataId",sch2);
+
 const monmodel = mongoose.model("NEWCOL",sch);
 // connecting Module to Schema End
 
@@ -58,7 +46,8 @@ app.post("/post",async(req,res) => {
         address:req.body.address,
         oid:req.body.oid,
         price:req.body.price,
-        qty:req.body.qty
+        qty:req.body.qty,
+        currentDate:req.body.currentDate
     });
     const val = await data.save();
     res.send(data)
@@ -70,19 +59,7 @@ app.listen(4000,() => {
 
 
 
-// Post Operation UserID Start
-app.post("/postid",async(req,res) => {
-    console.log("inside post id function");
-    const data1 = new monmodelId({
-        genearateID: req.body.genearateID
-    });
-    const val1 = await data1.save();
-    res.send(data1)
-});
-app.listen(3000,() => {
-    console.log("on Port 3000 ID")
-});
-// Post Operation UserID End
+
 
 
 // Get Operation User Start
@@ -101,6 +78,7 @@ app.put('/update/:oid',async(req,res) => {
      let updateOid     = req.body.oid;
      let updatePrice = req.body.price;
      let updateQty = req.body.qty;
+     let currentDate = req.body.currentDate;
      monmodel.findOneAndUpdate({
         oid:updateOid
      },{$set:{
@@ -110,6 +88,7 @@ app.put('/update/:oid',async(req,res) => {
         address:updateAddress,
         price:updatePrice,
         qty:updateQty,
+        currentDate:currentDate
     }}
      ,{new:true},(err,data) => {
         if(err) {
@@ -128,23 +107,6 @@ app.put('/update/:oid',async(req,res) => {
 // Update Operation User End
 
 
-// Get Operation UserID Start
-app.get("/viewid",(req,res) => {
-    monmodelId.find({} ,function(err,data) {
-        if(err) {
-            res.send("ERROR ID")
-        }
-        else {
-            if(data.length == 0) {
-                res.send("Nothing found id")
-            }
-            else {
-                res.send(data)
-            }
-        }
-    })
-});
-// Get Operation UserID End
 
 
 // Get Operation User FetchID Start
@@ -189,3 +151,21 @@ monmodel.findOneAndDelete(({oid:delID}),function(err,docs){
 });
 // Delete Operation User DeleteID End
 
+
+// Get Product All data Start
+app.get("/getAllProductsData",(req,res) => {
+    monmodel.find({} ,function(err,data) {
+        if(err) {
+            res.send("ERROR ID")
+        }
+        else {
+            if(data.length == 0) {
+                res.send("Nothing found id")
+            }
+            else {
+                res.send(data)
+            }
+        }
+    })
+});
+// Get Product All data Start
