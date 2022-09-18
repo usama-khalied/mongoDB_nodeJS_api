@@ -5,6 +5,7 @@ const sch = {
     address:String,
     oid:Number,
     price:Number,
-    qty:Number
+    qty:Number,
+    currentDate:String,
 }
 module.exports = sch
