@@ -1,7 +1,4 @@
 const mongoose = require("mongoose");
-
-
-
 const Order = {
     name:String,
     email:String,
