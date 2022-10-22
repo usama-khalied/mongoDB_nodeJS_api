@@ -1,20 +1,17 @@
-
 const express = require("express");
 const app = express();
 require('dotenv').config()
 require('./config/DatabaseConnctions');
-
+const orderRoutes = require('./routes/order')
 const cors = require('cors');
 const router =  express.Router()
 const port = process.env.PORT
 
-app.listen(port,() => {
-    console.log(`on port ${port}`)
-});
+
 
 app.use(express.json());
 app.use(cors())
-
+app.use(orderRoutes)
 
 const OrderSchema = require("./models/order").OrderSchema;
 
@@ -136,19 +133,22 @@ OrderSchema.findOneAndDelete(({oid:DelId}),function(err,docs){
 
 
 // Get Product All data Start
-app.get("/getAllProductsData",(req,res) => {
-    OrderSchema.find({} ,function(err,data) {
-        if(err) {
-            res.send("ERROR ID")
-        }
-        else {
-            if(data.length == 0) {
-                res.send("Nothing found id")
-            }
-            else {
-                res.send(data)
-            }
-        }
-    })
-});
+// app.get("/getAllProductsData",(req,res) => {
+//     OrderSchema.find({} ,function(err,data) {
+//         if(err) {
+//             res.send("ERROR ID")
+//         }
+//         else {
+//             if(data.length == 0) {
+//                 res.send("Nothing found id")
+//             }
+//             else {
+//                 res.send(data)
+//             }
+//         }
+//     })
+// });
 // Get Product All data Start
+app.listen(port,() => {
+    console.log(`on port ${port}`)
+});
