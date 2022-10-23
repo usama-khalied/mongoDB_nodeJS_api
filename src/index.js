@@ -41,11 +41,7 @@ app.post("/post",async(req,res) => {
 
 
 
-// Get Operation User Start
-app.get('/view',(req,res) => {
-    res.send("Hellow world");
-});
-// Get Operation User End
+
 
 
 // Update Operation User Start
