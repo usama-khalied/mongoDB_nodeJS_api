@@ -1,22 +1,10 @@
 const express = require("express");
-const routes = express.Router();
-const OrderSchema = require("../models/order").OrderSchema;
-require('../config/DatabaseConnctions');
+const routes =  express.Router();
+const orderControllers  = require('../controllers/order')
 
-routes.get("/getAllProductsData",(req,res) => {
-    OrderSchema.find({} ,function(err,data) {
-        if(err) {
-            res.send("ERROR ID")    
-        }
-        else {
-            if(data.length == 0) {
-                res.send("Nothing found id")
-            }
-            else {
-                res.send(data)
-            }
-        }
-    })
-});
+
+
+
+routes.get("/getAllProductsData",orderControllers.getAllOrders);
 
 module.exports = routes
