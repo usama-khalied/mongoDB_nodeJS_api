@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const Order = {
     name:String,
     email:String,
@@ -9,5 +8,5 @@ const Order = {
     qty:Number,
     currentDate:String,
 }
-const OrderSchema = mongoose.model("NEWCOL",Order);
-module.exports = OrderSchema
+
+module.exports = Order
