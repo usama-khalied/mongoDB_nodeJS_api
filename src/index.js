@@ -4,16 +4,15 @@ require('dotenv').config()
 require('./config/DatabaseConnctions');
 const orderRoutes = require('./routes/order')
 const cors = require('cors');
-const router =  express.Router()
 const port = process.env.PORT
-
+const OrderSchema = require("./models/order").OrderSchema;
 
 
 app.use(express.json());
 app.use(cors())
 app.use(orderRoutes)
 
-const OrderSchema = require("./models/order").OrderSchema;
+
 
 
 
