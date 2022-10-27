@@ -7,6 +7,7 @@ const Order = {
     price:Number,
     qty:Number,
     currentDate:String,
+    status:String
 }
 
 module.exports = Order
