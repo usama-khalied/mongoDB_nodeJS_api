@@ -29,6 +29,7 @@ const updatOrder = (req,res) => {
     let updatePrice = req.body.price;
     let updateQty = req.body.qty;
     let currentDate = req.body.currentDate;
+    let updatestatus = req.body.status
     OrderSchema.findOneAndUpdate({
         oid:updateOid
      },{$set:{
@@ -38,7 +39,8 @@ const updatOrder = (req,res) => {
         address:updateAddress,
         price:updatePrice,
         qty:updateQty,
-        currentDate:currentDate
+        currentDate:currentDate,
+        status:updatestatus
     }}
      ,{new:true},(err,data) => {
         if(err) {
@@ -101,7 +103,8 @@ const postOrder = async (req,res) => {
         oid:req.body.oid,
         price:req.body.price,
         qty:req.body.qty,
-        currentDate:req.body.currentDate
+        currentDate:req.body.currentDate,
+        status:req.body.status
     });
     const val = await data.save();
     res.send(data)  
