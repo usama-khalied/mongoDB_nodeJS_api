@@ -1,8 +1,12 @@
 const express = require("express");
 const routes =  express.Router();
 const orderControllers  = require('../controllers/order')
+const orderStatusController = require('../controllers/orderStatus')
 
 
+
+// Get All Orders Status using this route 
+routes.get('getOrdersStatus',orderStatusController.getAllOrdersStatus)
 
 // Get All Orders using this route - complete testing ✔✔✔
 routes.get("/getAllOrdersData",orderControllers.getAllOrders);
