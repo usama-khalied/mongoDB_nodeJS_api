@@ -1,6 +1,6 @@
 const Product = {
     ProductName:String,
-    ProductPrice:String,
+    ProductPrice:Number,
     ProductQuantity:Number,
     ProductImage:String,
     ProductDescription:String,
