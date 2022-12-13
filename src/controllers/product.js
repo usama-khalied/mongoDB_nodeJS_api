@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const ProductSchema = mongoose.model("products", Product);
-const multer = require("multer");
-
+const path = require('path');
 
 
 
@@ -42,10 +41,13 @@ const postProduct = async (req, res) => {
       ProductName:req.body.ProductName,
       ProductPrice:req.body.ProductPrice,
       ProductQuantity:req.body.ProductQuantity,
-      ProductImage:req.body.ProductImage,
+      // ProductImage:req.body.ProductImage,
       ProductDescription:req.body.ProductDescription,
       ProductCode:req.body.ProductCode
     });
+    if(req.file) {
+         data.ProductImage = req.file.path
+    }
     const val = await data.save();
     res.send(val);
   } catch (error) {
