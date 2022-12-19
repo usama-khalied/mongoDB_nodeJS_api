@@ -41,7 +41,6 @@ const postProduct = async (req, res) => {
       ProductName:req.body.ProductName,
       ProductPrice:req.body.ProductPrice,
       ProductQuantity:req.body.ProductQuantity,
-      // ProductImage:req.body.ProductImage,
       ProductDescription:req.body.ProductDescription,
       ProductCode:req.body.ProductCode
     });
@@ -49,7 +48,8 @@ const postProduct = async (req, res) => {
          data.ProductImage = req.file.path
     }
     const val = await data.save();
-    res.send(val);
+    // res.send(val);
+      res.send(val)    
   } catch (error) {
     res.status(204).json({ message: "Data Not found" });
   }
