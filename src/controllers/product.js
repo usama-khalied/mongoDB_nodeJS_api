@@ -3,7 +3,7 @@ const Product = require("../models/Product");
 const ProductSchema = mongoose.model("products", Product);
 const path = require("path");
 
-// Get All OrderStatus Method
+// Get All Products Method
 const getAllProducts = (req, res) => {
   try {
     ProductSchema.find({}, function (err, data) {
@@ -22,18 +22,7 @@ const getAllProducts = (req, res) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
+//  Save or Update Method 
 const postProduct = async (req, res) => {
   try {
     const data = new ProductSchema({
