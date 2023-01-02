@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const ProductSchema = mongoose.model("products", Product);
 const path = require("path");
+const fs = require("fs");
 
 // Get All Products Method
 const getAllProducts = (req, res) => {
@@ -22,7 +23,7 @@ const getAllProducts = (req, res) => {
   }
 };
 
-//  Save or Update Method 
+//  Save or Update Method
 const postProduct = async (req, res) => {
   try {
     const data = new ProductSchema({
@@ -74,8 +75,44 @@ const postProduct = async (req, res) => {
     res.status(204).json({ message: "Data Not found" });
   }
 };
+// Delete Request
+const deleteProduct = (req, res) => {
+  let productCodeForDelete = req.params.ProductCode;
+  ProductSchema.findOneAndDelete(
+    { ProductCode: productCodeForDelete },
+    function (err, docs) {
+      if (err) {
+        res.send("ERROR");
+      } else {
+        if (docs == null) {
+          res.send("WRONG ID");
+        } else {
+          let cutString = docs.ProductImage;
+          cutString = cutString.slice(8, cutString.length);
+          res.send(cutString);
+          // const fileName = docs.ProductCode;
+          let imagePath = process.cwd();
+          const directoryPath = imagePath + "/uploads/";
+
+          try {
+            fs.unlinkSync(directoryPath + cutString);
+
+            res.status(200).send({
+              message: "File is deleted.",
+            });
+          } catch (err) {
+            res.status(500).send({
+              message: "Could not delete the file. " + err,
+            });
+          }
+        }
+      }
+    }
+  );
+};
 
 module.exports = {
   getAllProducts,
   postProduct,
+  deleteProduct,
 };
