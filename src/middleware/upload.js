@@ -4,10 +4,14 @@ const multer =  require('multer');
 const storage = multer.diskStorage({
     destination:"uploads/",
     filename: function (req, file, cb) {
-        let ext = path.extname(file.originalname);
-        cb(null, Date.now() + ext)
+        if(file != null){
+            let ext = path.extname(file.originalname);
+            cb(null, Date.now() + ext)
+        }     
     }
   })
+
+
 
 var upload = multer({
     storage:storage,
