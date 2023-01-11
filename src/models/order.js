@@ -1,16 +1,13 @@
 const Order = {
-    name:String,
-    email:String,
-    phone:String,
-    address:String,
-    oid:Number,
-    price:Number,
-    qty:Number,
-    currentDate:String,
-    status:String
-}
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  phone: { type: String, required: true },
+  address: { type: String, required: true },
+  oid: { type: Number, required: true },
+  price: { type: Number, required: true },
+  qty: { type: Number, required: true },
+  currentDate: { type: String, required: true },
+  status: { type: String, required: true },
+};
 
-module.exports = Order
-
-
-    
+module.exports = Order;

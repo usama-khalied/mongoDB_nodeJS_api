@@ -1,6 +1,6 @@
-const orderStatus = {
-    Id:Number,
-    orderStatus:String
-}
+const OrderStatus = {
+  Id: { type: Number, required: true },
+  orderStatus: { type: String, required: true },
+};
 
-module.export = orderStatus
+module.export = OrderStatus;

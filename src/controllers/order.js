@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const order = require("../models/order");
-const OrderSchema = mongoose.model("NEWCOL", order);
+const Order = require("../models/Order");
+const OrderSchema = mongoose.model("NEWCOL", Order);
 
 // Get All Data Method
 const getAllOrders = (req, res) => {
@@ -101,7 +101,9 @@ const postOrder = async (req, res) => {
     qty: req.body.qty,
     currentDate: req.body.currentDate,
     status: req.body.status,
-  });
+
+  }
+  );
   const val = await data.save();
   res.send(data);
 };
