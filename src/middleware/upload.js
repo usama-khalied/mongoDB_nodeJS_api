@@ -12,6 +12,7 @@ const storage = multer.diskStorage({
 });
 
 var upload = multer({
+  
   storage: storage,
   fileFilter: function (req, file, callback) {
     // if(file.mimetype=="image/png" || file.mimetype=="image/jpg") {
@@ -25,5 +26,6 @@ var upload = multer({
     fileSize: 1024 * 1024 * 2,
   },
 }).single("ProductImage");
+
 
 module.exports = upload;

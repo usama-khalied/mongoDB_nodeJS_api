@@ -26,6 +26,7 @@ const getAllProducts = (req, res) => {
 //  Save or Update Method
 const postProduct = async (req, res) => {
   try {
+    console.log(req)
     const data = new ProductSchema({
       ProductName: req.body.ProductName,
       ProductPrice: req.body.ProductPrice,
