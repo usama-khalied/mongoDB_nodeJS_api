@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Order = require("../models/Order");
-const OrderSchema = mongoose.model("NEWCOL", Order);
+const OrderSchema = mongoose.model("Orders", Order);
 
 // Get All Data Method
 const getAllOrders = (req, res) => {
