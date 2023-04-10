@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const OrderSchema = mongoose.model("Orders", Order);
+const successMessage = 'Request successful';
 
 // Get All Data Method
 const getAllOrders = (req, res) => {
@@ -28,6 +29,7 @@ const updatOrder = (req, res) => {
   let updateQty = req.body.qty;
   let currentDate = req.body.currentDate;
   let updateStatus = req.body.status;
+  let updateproduct = req.body.product;
   OrderSchema.findOneAndUpdate(
     {
       oid: updateOid,
@@ -42,6 +44,7 @@ const updatOrder = (req, res) => {
         qty: updateQty,
         currentDate: currentDate,
         status: updateStatus,
+        product: updateproduct,
       },
     },
     { new: true },
@@ -91,22 +94,29 @@ const delByOrderId = (req, res) => {
   });
 };
 const postOrder = async (req, res) => {
-  const data = new OrderSchema({
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    address: req.body.address,
-    oid: req.body.oid,
-    price: req.body.price,
-    qty: req.body.qty,
-    currentDate: req.body.currentDate,
-    status: req.body.status,
+  try {
+        const data = new OrderSchema({
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      address: req.body.address,
+      oid: req.body.oid,
+      price: req.body.price,
+      qty: req.body.qty,
+      currentDate: req.body.currentDate,
+      status: req.body.status,
+      product: req.body.product,
+    });
+    await  data.save()
+                .then((res) => {
+                res.send({message:"Success"})
+                })
+  } catch (error) {
+    res.send({message:"Success"})
 
   }
-  );
-  const val = await data.save();
-  res.send(data);
-};
+}
+
 module.exports = {
   getAllOrders,
   updatOrder,
@@ -114,3 +124,18 @@ module.exports = {
   delByOrderId,
   postOrder,
 };
+
+
+
+  //   const data = new OrderSchema({
+  //     name: req.body.name,
+  //     email: req.body.email,
+  //     phone: req.body.phone,
+  //     address: req.body.address,
+  //     oid: req.body.oid,
+  //     price: req.body.price,
+  //     qty: req.body.qty,
+  //     currentDate: req.body.currentDate,
+  //     status: req.body.status,
+  //     product: req.body.product,
+  //   });

@@ -1,4 +1,5 @@
 const Product = {
+
   ProductName: {
     type: String,
     required: true,
@@ -24,6 +25,10 @@ const Product = {
     type: String,
     required: true,
   },
+  ProductEstimate:{
+    type:String,
+    required:true
+  }
 };
 
 module.exports = Product;

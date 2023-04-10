@@ -8,6 +8,7 @@ const Order = {
   qty: { type: Number, required: true },
   currentDate: { type: String, required: true },
   status: { type: String, required: true },
+  product :{type:[],required:true}
 };
 
 module.exports = Order;

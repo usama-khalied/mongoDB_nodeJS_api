@@ -16,6 +16,7 @@ const getAllProducts = (req, res) => {
         }
 
         res.send(data);
+   
       }
     });
   } catch (error) {
@@ -26,13 +27,13 @@ const getAllProducts = (req, res) => {
 //  Save or Update Method
 const postProduct = async (req, res) => {
   try {
-    console.log(req)
     const data = new ProductSchema({
       ProductName: req.body.ProductName,
       ProductPrice: req.body.ProductPrice,
       ProductQuantity: req.body.ProductQuantity,
       ProductDescription: req.body.ProductDescription,
       ProductCode: req.body.ProductCode,
+      ProductEstimate:req.body.ProductEstimate
     });
     const existingProduct = await ProductSchema.findOne({
       ProductCode: data.ProductCode,
@@ -56,6 +57,7 @@ const postProduct = async (req, res) => {
             ProductDescription: data.ProductDescription,
             ProductCode: data.ProductCode,
             ProductImage: req.file.path,
+            ProductEstimate:data.ProductEstimate,
           },
         },
         { new: true },
@@ -77,7 +79,7 @@ const postProduct = async (req, res) => {
   }
 };
 // Delete Request
-const deleteProduct = (req, res) => {
+const deleteProduct = async (req, res) => {
   let productCodeForDelete = req.params.ProductCode;
   ProductSchema.findOneAndDelete(
     { ProductCode: productCodeForDelete },
@@ -88,32 +90,53 @@ const deleteProduct = (req, res) => {
         if (docs == null) {
           res.send("WRONG ID");
         } else {
+          
           let cutString = docs.ProductImage;
-          cutString = cutString.slice(8, cutString.length);
-          res.send(cutString);
-          // const fileName = docs.ProductCode;
-          let imagePath = process.cwd();
-          const directoryPath = imagePath + "/uploads/";
-
-          try {
-            fs.unlinkSync(directoryPath + cutString);
-
-            res.status(200).send({
-              message: "File is deleted.",
-            });
-          } catch (err) {
-            res.status(500).send({
-              message: "Could not delete the file. " + err,
-            });
-          }
+          deleteImageFromSource(cutString);
+     
         }
       }
     }
   );
 };
 
+function deleteImageFromSource(aar){
+  let cutString = aar;
+  cutString = cutString.slice(8, cutString.length);
+  res.send(cutString);
+  let imagePath = process.cwd();
+  const directoryPath = imagePath + "/uploads/";
+
+  try {
+    fs.unlinkSync(directoryPath + cutString);
+
+    res.status(200).send({
+      message: "File is deleted.",
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: "Could not delete the file. " + err,
+    });
+  }
+}
+// Get data By Id 
+const dataById = (req,res) => {
+  fetchID = req.params.ProductCode;
+  ProductSchema.findOne({ ProductCode: fetchID }, function (err, val) {
+    if (err) {
+      res.send("ERROR");
+    } else {
+      if (val.length == 0) {
+        res.send("nothing found");
+      } else {
+        res.send(val);
+      }
+    }
+  });
+}
 module.exports = {
   getAllProducts,
   postProduct,
   deleteProduct,
+  dataById
 };

@@ -10,5 +10,6 @@ routes.post(
   productControllers.postProduct
 );
 routes.delete("/Product/del/:ProductCode", productControllers.deleteProduct);
+routes.get("/Product/get/:ProductCode",productControllers.dataById);
 
 module.exports = routes;

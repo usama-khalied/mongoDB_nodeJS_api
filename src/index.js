@@ -9,6 +9,7 @@ require('./config/DatabaseConnctions');
 
 const orderRoutes = require('./routes/order');
 const orderStatusRoutes = require('./routes/orderStatus')
+// const productRoutes = require('./routes/product')
 const productRoutes = require('./routes/product')
 const loginRoutes = require('./routes/login')
 
