@@ -21,7 +21,7 @@ const User = {
   //   required: true,
   // },
   userId:Number,
-  email:String,
+  username:String,
   password:String
 };
 

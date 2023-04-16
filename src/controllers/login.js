@@ -8,15 +8,15 @@ const User = require("../models/Login.js");
 const UserSchema = mongoose.model("User", User);
 
 const signup = async (req, res) => {
-  const { userId, password, email } = req.body;
+  const { userId, password, username } = req.body;
   try {
-    const existingUser = await UserSchema.findOne({ email: email });
+    const existingUser = await UserSchema.findOne({ username: username });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = new UserSchema({
-      email: email,
+      username: username,
       password: hashedPassword,
       userId: userId,
     });
@@ -29,9 +29,9 @@ const signup = async (req, res) => {
 };
 
 const signin = async (req, res) => {
-  const { password, email } = req.body;
+  const { password, username } = req.body;
   try {
-    const existingUser = await UserSchema.findOne({ email: email });
+    const existingUser = await UserSchema.findOne({ username: username });
     if (!existingUser) {
       return res.status(404).json({ message: "Not found" });
     }
