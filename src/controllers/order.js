@@ -3,6 +3,9 @@ const Order = require("../models/Order");
 const OrderSchema = mongoose.model("Orders", Order);
 const successMessage = 'Request successful';
 
+
+
+
 // Get All Data Method
 const getAllOrders = (req, res) => {
   OrderSchema.find({}, function (err, data) {
