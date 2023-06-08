@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const OrderSchema = mongoose.model("Orders", Order);
-const successMessage = 'Request successful';
 
 
 

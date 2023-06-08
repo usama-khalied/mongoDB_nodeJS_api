@@ -9,7 +9,7 @@ const verifyToken = require('../middleware/auth');
 routes.get('getOrdersStatus',verifyToken,orderStatusController.getAllOrdersStatus)
 
 // Get All Orders using this route - complete testing ✔✔✔
-routes.get("/Orders/getAllOrdersData",verifyToken,orderControllers.getAllOrders);
+routes.get("Orders/getAllOrdersData",orderControllers.getAllOrders);
 // routes.get("/Orders/getAllOrdersData",orderControllers.getAllOrders);
 
 
@@ -18,10 +18,10 @@ routes.get("/Orders/getAllOrdersData",verifyToken,orderControllers.getAllOrders)
 
 
 // Post Method using this route - complete testing ✔✔✔
-routes.post("/postData",verifyToken,orderControllers.postOrder);
+routes.post("/postData",orderControllers.postOrder);
 
 // Update Method using this route - complete testing ✔✔✔
-routes.put("/updateOrder/:oid",verifyToken,orderControllers.updatOrder);
+routes.put("/updateOrder/:oid",orderControllers.updatOrder);
 
 // Get Order By Id using this route - complete testing ✔✔✔
 routes.get("/fetchOrder/:oid",verifyToken,orderControllers.getOrderById);

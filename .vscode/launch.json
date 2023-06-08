@@ -13,6 +13,16 @@
             ],
             "type": "node"
         },
+
+        {
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/index.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
   
     ]
 }
