@@ -13,10 +13,8 @@ const getAllProducts = (req, res) => {
       } else {
         if (data.length == 0) {
           return res.send("Nothing found id");
-        }
-
+        } 
         res.send(data);
-   
       }
     });
   } catch (error) {
@@ -33,7 +31,7 @@ const postProduct = async (req, res) => {
       ProductQuantity: req.body.ProductQuantity,
       ProductDescription: req.body.ProductDescription,
       ProductCode: req.body.ProductCode,
-      ProductEstimate:req.body.ProductEstimate
+      ProductEstimate: req.body.ProductEstimate,
     });
     const existingProduct = await ProductSchema.findOne({
       ProductCode: data.ProductCode,
@@ -57,7 +55,7 @@ const postProduct = async (req, res) => {
             ProductDescription: data.ProductDescription,
             ProductCode: data.ProductCode,
             ProductImage: req.file.path,
-            ProductEstimate:data.ProductEstimate,
+            ProductEstimate: data.ProductEstimate,
           },
         },
         { new: true },
@@ -90,17 +88,15 @@ const deleteProduct = async (req, res) => {
         if (docs == null) {
           res.send("WRONG ID");
         } else {
-          
           let cutString = docs.ProductImage;
           deleteImageFromSource(cutString);
-     
         }
       }
     }
   );
 };
 
-function deleteImageFromSource(aar){
+function deleteImageFromSource(aar) {
   let cutString = aar;
   cutString = cutString.slice(8, cutString.length);
   res.send(cutString);
@@ -119,8 +115,8 @@ function deleteImageFromSource(aar){
     });
   }
 }
-// Get data By Id 
-const dataById = (req,res) => {
+// Get data By Id
+const dataById = (req, res) => {
   fetchID = req.params.ProductCode;
   ProductSchema.findOne({ ProductCode: fetchID }, function (err, val) {
     if (err) {
@@ -133,10 +129,10 @@ const dataById = (req,res) => {
       }
     }
   });
-}
+};
 module.exports = {
   getAllProducts,
   postProduct,
   deleteProduct,
-  dataById
+  dataById,
 };

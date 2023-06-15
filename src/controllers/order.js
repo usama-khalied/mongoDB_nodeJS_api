@@ -14,11 +14,15 @@ const getAllOrders = (req, res) => {
       if (data.length == 0) {
         res.send("Nothing found id");
       } else {
+        console.log(data)
         res.send(data);
       }
     }
   });
 };
+
+
+
 
 // Update Order Method
 const updatOrder = (req, res) => {
