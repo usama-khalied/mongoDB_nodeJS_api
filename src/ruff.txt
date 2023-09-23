@@ -1,0 +1,19 @@
+    await OrderSchema.find({}, (err, document) => {
+      if (document) {
+  const processList = document.filter(e => e.status === 'Process');
+  const pendingList = document.filter(e => e.status === 'Pending');
+
+  const dashboardList = [
+    new Dashboard('Process', processList.length),
+    new Dashboard('Pending', pendingList.length)
+  ];
+  try {
+    res.send(dashboardList);
+  } catch (error) {
+    // Handle the error appropriately (e.g., log the error, send an error response, etc.)
+    console.error('An error occurred:', error);
+    res.status(500).send('Internal Server Error');
+  }
+      }
+    
+  });

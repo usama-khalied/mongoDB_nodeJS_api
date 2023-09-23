@@ -2,9 +2,6 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const OrderSchema = mongoose.model("Orders", Order);
 
-
-
-
 // Get All Data Method
 const getAllOrders = (req, res) => {
   OrderSchema.find({}, function (err, data) {
@@ -14,15 +11,12 @@ const getAllOrders = (req, res) => {
       if (data.length == 0) {
         res.send("Nothing found id");
       } else {
-        console.log(data)
+        console.log(data);
         res.send(data);
       }
     }
   });
 };
-
-
-
 
 // Update Order Method
 const updatOrder = (req, res) => {
@@ -101,7 +95,7 @@ const delByOrderId = (req, res) => {
 };
 const postOrder = async (req, res) => {
   try {
-        const data = new OrderSchema({
+    const data = new OrderSchema({
       name: req.body.name,
       email: req.body.email,
       phone: req.body.phone,
@@ -113,15 +107,41 @@ const postOrder = async (req, res) => {
       status: req.body.status,
       product: req.body.product,
     });
-    await  data.save()
-                .then((res) => {
-                res.send({message:"Success"})
-                })
+    await data.save().then((res) => {
+      res.send({ message: "Success" });
+    });
   } catch (error) {
-    res.send({message:"Success"})
-
+    res.send({ message: "Success" });
   }
-}
+};
+
+
+// Order length for using  Dashboard Chart - Start
+const getDashboard = async (req, res) => {
+  try {
+    const orders = await OrderSchema.find({}).exec();
+
+    if (orders.length === 0) {
+      res.send("Nothing found id");
+    } else {
+      const [processList, pendingList,deliveredList] = [
+        orders.filter((e) => e.status === "Process"),
+        orders.filter((e) => e.status === "Pending"),
+        orders.filter((e) => e.status === "Delivered"),
+      ];
+      const dashboardList = [
+        new Dashboard("Process", processList.length),
+        new Dashboard("Pending", pendingList.length),
+        new Dashboard("Delivered", deliveredList.length),
+      ];
+      res.send(dashboardList);
+    }
+  } catch (error) {
+    console.error("ERROR ID", error);
+    res.send("ERROR ID");
+  }
+};
+// Order length for using  Dashboard Chart - Close
 
 module.exports = {
   getAllOrders,
@@ -129,19 +149,12 @@ module.exports = {
   getOrderById,
   delByOrderId,
   postOrder,
+  getDashboard,
 };
 
-
-
-  //   const data = new OrderSchema({
-  //     name: req.body.name,
-  //     email: req.body.email,
-  //     phone: req.body.phone,
-  //     address: req.body.address,
-  //     oid: req.body.oid,
-  //     price: req.body.price,
-  //     qty: req.body.qty,
-  //     currentDate: req.body.currentDate,
-  //     status: req.body.status,
-  //     product: req.body.product,
-  //   });
+class Dashboard {
+  constructor(name, value) {
+    this.name = name;
+    this.value = value;
+  }
+}

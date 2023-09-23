@@ -16,16 +16,7 @@ const verifyToken = (req, res, next) => {
   return next();
 };
 
-// const verifyToken = (req, res, next) => {
-//   token = req.body.token || req.query.token || req.headers["x-access-token"] || req.headers['authorization'];
-  
-//   if(!token){
-//     return "Token is not valid or any other cases"
-//   }
-//   else {
-//     next();
-//   }
-// };
+
 
 
 
