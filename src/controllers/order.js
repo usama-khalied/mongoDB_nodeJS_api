@@ -1,22 +1,25 @@
 const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const OrderSchema = mongoose.model("Orders", Order);
+const HttpResponse = require('../models/HttpResponse');
+
+// 
+// Author Usama
+// 
 
 // Get All Data Method
-const getAllOrders = (req, res) => {
-  OrderSchema.find({}, function (err, data) {
-    if (err) {
-      res.send("ERROR ID");
-    } else {
-      if (data.length == 0) {
-        res.send("Nothing found id");
-      } else {
-        console.log(data);
-        res.send(data);
-      }
-    }
-  });
-};
+const getAllOrders = async (req, res) => {
+  try {
+    const orders = await OrderSchema.find();
+    let response;
+    if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
+    response = new HttpResponse(null, 1, 200, "Successfully", orders);
+    return res.status(response.status).json(response);
+  } catch (error) {
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
+  }
+}
 
 // Update Order Method
 const updatOrder = (req, res) => {
@@ -124,7 +127,7 @@ const getDashboard = async (req, res) => {
     if (orders.length === 0) {
       res.send("Nothing found id");
     } else {
-      const [processList, pendingList,deliveredList] = [
+      const [processList, pendingList, deliveredList] = [
         orders.filter((e) => e.status === "Process"),
         orders.filter((e) => e.status === "Pending"),
         orders.filter((e) => e.status === "Delivered"),

@@ -3,24 +3,24 @@ const Product = require("../models/Product");
 const ProductSchema = mongoose.model("products", Product);
 const path = require("path");
 const fs = require("fs");
+const HttpResponse = require('../models/HttpResponse');
 
 // Get All Products Method
-const getAllProducts = (req, res) => {
+const getAllProducts = async (req, res) => {
   try {
-    ProductSchema.find({}, function (err, data) {
-      if (err) {
-        return res.send("ERROR ID");
-      } else {
-        if (data.length == 0) {
-          return res.send("Nothing found id");
-        } 
-        res.send(data);
-      }
-    });
+    const products = await ProductSchema.find();
+    let response;
+    if (products.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
+    response = new HttpResponse(null, 1, 200, "Successfully", products);
+    return res.status(response.status).json(response);
   } catch (error) {
-    res.status.json({ message: "Request is not delivered" });
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
   }
-};
+}
+
+
+
 
 //  Save or Update Method
 const postProduct = async (req, res) => {
