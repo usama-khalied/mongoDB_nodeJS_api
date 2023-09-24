@@ -1,15 +1,11 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");                   
 require('dotenv').config()
 const port = process.env.PORT;
-const calculator = require('sameed-cal1')
 const cors = require('cors');
-
 require('./config/DatabaseConnctions');
 
-
-console.log(calculator);
 
 const orderRoutes = require('./routes/order');
 const orderStatusRoutes = require('./routes/orderStatus')
