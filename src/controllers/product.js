@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const ProductSchema = mongoose.model("products", Product);
-const path = require("path");
 const fs = require("fs");
 const HttpResponse = require('../models/HttpResponse');
 
@@ -21,8 +20,8 @@ const getAllProducts = async (req, res) => {
 
 
 
-
 //  Save or Update Method
+
 const postProduct = async (req, res) => {
   try {
     const data = new ProductSchema({
@@ -76,29 +75,22 @@ const postProduct = async (req, res) => {
     res.status(204).json({ message: "Data Not found" });
   }
 };
+
 // Delete Request
 const deleteProduct = async (req, res) => {
-  let productCodeForDelete = req.params.ProductCode;
-  ProductSchema.findOneAndDelete(
-    { ProductCode: productCodeForDelete },
-    function (err, docs) {
-      if (err) {
-        res.send("ERROR");
-      } else {
-        if (docs == null) {
-          res.send("WRONG ID");
-        } else {
-          let cutString = docs.ProductImage;
-          deleteImageFromSource(cutString);
-        }
-      }
-    }
-  );
+  try {
+    const productCode = req.params.ProductCode;
+    response = new HttpResponse(null, 1, 200, "Successfully", await ProductSchema.findOneAndDelete({ ProductCode: productCode }, (err, res)));
+    deleteImageFromSource(res.ProductImage);
+    return res.status(response.status).json(response);
+  } catch (error) {
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
+  }
 };
 
 function deleteImageFromSource(aar) {
-  let cutString = aar;
-  cutString = cutString.slice(8, cutString.length);
+  cutString = cutString.slice(8, aar.length);
   res.send(cutString);
   let imagePath = process.cwd();
   const directoryPath = imagePath + "/uploads/";
@@ -115,21 +107,21 @@ function deleteImageFromSource(aar) {
     });
   }
 }
+
+
 // Get data By Id
-const dataById = (req, res) => {
-  fetchID = req.params.ProductCode;
-  ProductSchema.findOne({ ProductCode: fetchID }, function (err, val) {
-    if (err) {
-      res.send("ERROR");
-    } else {
-      if (val.length == 0) {
-        res.send("nothing found");
-      } else {
-        res.send(val);
-      }
-    }
-  });
-};
+const dataById = async (req, res) => {
+  try {
+    const productCode = req.params.ProductCode;
+    const product = await ProductSchema.findOne({ ProductCode: productCode });
+    let response;
+    if (product.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
+    return res.status(response.status).json(response);
+  } catch (error) {
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
+  }
+}
 module.exports = {
   getAllProducts,
   postProduct,

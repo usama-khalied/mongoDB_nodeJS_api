@@ -22,82 +22,80 @@ const getAllOrders = async (req, res) => {
 }
 
 // Update Order Method
-const updatOrder = (req, res) => {
-  let updateName = req.body.name;
-  let updateEmail = req.body.email;
-  let updatePhone = req.body.phone;
-  let updateAddress = req.body.address;
-  let updateOid = req.body.oid;
-  let updatePrice = req.body.price;
-  let updateQty = req.body.qty;
-  let currentDate = req.body.currentDate;
-  let updateStatus = req.body.status;
-  let updateproduct = req.body.product;
-  OrderSchema.findOneAndUpdate(
-    {
-      oid: updateOid,
-    },
-    {
-      $set: {
-        name: updateName,
-        email: updateEmail,
-        phone: updatePhone,
-        address: updateAddress,
-        price: updatePrice,
-        qty: updateQty,
-        currentDate: currentDate,
-        status: updateStatus,
-        product: updateproduct,
+const updatOrder = async (req, res) => {
+  try {
+    let response;
+    let updateName = req.body.name;
+    let updateEmail = req.body.email;
+    let updatePhone = req.body.phone;
+    let updateAddress = req.body.address;
+    let updateOid = req.body.oid;
+    let updatePrice = req.body.price;
+    let updateQty = req.body.qty;
+    let currentDate = req.body.currentDate;
+    let updateStatus = req.body.status;
+    let updateproduct = req.body.product;
+    let order = await OrderSchema.findOneAndUpdate(
+      {
+        oid: updateOid,
       },
-    },
-    { new: true },
-    (err, data) => {
-      if (err) {
-        res.send("ERROR");
-      } else {
-        if (data == null) {
-          res.send("nothing found");
-        } else {
-          res.send(data);
-        }
-      }
-    }
-  );
-};
+      {
+        $set: {
+          name: updateName,
+          email: updateEmail,
+          phone: updatePhone,
+          address: updateAddress,
+          price: updatePrice,
+          qty: updateQty,
+          currentDate: currentDate,
+          status: updateStatus,
+          product: updateproduct,
+        },
+      },
+      { new: true });
+    if (order.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
+    response = new HttpResponse(null, 1, 200, "Successfully", order);
+    return res.status(response.status).json(response);
+  } catch (error) {
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
+  }
+
+}
 
 // Gt Order By Id
-const getOrderById = (req, res) => {
-  fetchID = req.params.oid;
-  OrderSchema.findOne({ oid: fetchID }, function (err, val) {
-    if (err) {
-      res.send("ERROR");
-    } else {
-      if (val.length == 0) {
-        res.send("nothing found");
-      } else {
-        res.send(val);
-      }
-    }
-  });
+const getOrderById = async (req, res) => {
+  try {
+    const Id = req.params.oid;
+    const order = await OrderSchema.findOne({ oid: Id });
+    let response;
+    if (order.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
+    response = new HttpResponse(null, 1, 200, "Successfully", order);
+    return res.status(response.status).json(response);
+  } catch (error) {
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
+  }
 };
 
 // Delete Order By ID
-const delByOrderId = (req, res) => {
-  let DelId = req.params.oid;
-  OrderSchema.findOneAndDelete({ oid: DelId }, function (err, docs) {
-    if (err) {
-      res.send("ERROR");
-    } else {
-      if (docs == null) {
-        res.send("WRONG ID");
-      } else {
-        res.send("Deleted");
-      }
-    }
-  });
+const delByOrderId = async (req, res) => {
+  try {
+    const Id = req.params.oid;
+    const order = await OrderSchema.findOneAndDelete({ oid: Id });
+    let response;
+    if (order.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
+    response = new HttpResponse(null, 1, 200, "Successfully", order);
+    return res.status(response.status).json(response);
+  } catch (error) {
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
+  }
 };
+
 const postOrder = async (req, res) => {
   try {
+    let response;
     const data = new OrderSchema({
       name: req.body.name,
       email: req.body.email,
@@ -111,10 +109,12 @@ const postOrder = async (req, res) => {
       product: req.body.product,
     });
     await data.save().then((res) => {
-      res.send({ message: "Success" });
+      response = new HttpResponse(null, 1, 200, "Successfully", order);
+      return res.status(response.status).json(response);
     });
   } catch (error) {
-    res.send({ message: "Success" });
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
   }
 };
 
@@ -122,11 +122,9 @@ const postOrder = async (req, res) => {
 // Order length for using  Dashboard Chart - Start
 const getDashboard = async (req, res) => {
   try {
+    let response;
     const orders = await OrderSchema.find({}).exec();
-
-    if (orders.length === 0) {
-      res.send("Nothing found id");
-    } else {
+    if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null); else {
       const [processList, pendingList, deliveredList] = [
         orders.filter((e) => e.status === "Process"),
         orders.filter((e) => e.status === "Pending"),
@@ -137,11 +135,12 @@ const getDashboard = async (req, res) => {
         new Dashboard("Pending", pendingList.length),
         new Dashboard("Delivered", deliveredList.length),
       ];
-      res.send(dashboardList);
+      response = new HttpResponse(null, 1, 200, "Successfully", dashboardList);
+      return res.status(response.status).json(response);
     }
   } catch (error) {
-    console.error("ERROR ID", error);
-    res.send("ERROR ID");
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
   }
 };
 // Order length for using  Dashboard Chart - Close
