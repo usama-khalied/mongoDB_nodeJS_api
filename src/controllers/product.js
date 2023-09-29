@@ -112,10 +112,10 @@ function deleteImageFromSource(aar) {
 // Get data By Id
 const dataById = async (req, res) => {
   try {
-    const productCode = req.params.ProductCode;
-    const product = await ProductSchema.findOne({ ProductCode: productCode });
+    const product = await ProductSchema.findOne({ ProductCode: req.params.ProductCode });
     let response;
-    if (product.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
+    if (Object.keys(product).length === 0) response = new HttpResponse(null, 1, 404, "No record found", null);
+    else response = new HttpResponse(null, 1, 200, "Successfully", product);
     return res.status(response.status).json(response);
   } catch (error) {
     response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
