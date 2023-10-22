@@ -9,8 +9,8 @@ const verifyToken = require('../middleware/auth');
 routes.get('getOrdersStatus',verifyToken,orderStatusController.getAllOrdersStatus)
 
 // Get All Orders using this route - complete testing ✔✔✔
-routes.get("/Orders/getAllOrdersData",verifyToken,orderControllers.getAllOrders);
-// routes.get("/Orders/getAllOrdersData",orderControllers.getAllOrders);
+// routes.get("/Orders/getAllOrdersData",verifyToken,orderControllers.getAllOrders);
+routes.get("/Orders/getAllOrdersData",orderControllers.getAllOrders);
 
 
 // ready for authentication auth function 👇👇👇
