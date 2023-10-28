@@ -16,7 +16,7 @@ const getAllOrders = async (req, res) => {
       .limit(parseInt(req.query.pageSize) || 5);
     let response;
     if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
-    response = new HttpResponse(null, 1, 200, "Successfully", orders);
+    response = new HttpResponse(null, 1, 200, "Successfully", orders,Number(req.query.pageSize),Number(req.query.page),req.query.sort === 'DESC' ? -1 : 1,orders.length);
     return res.status(response.status).json(response);
   } catch (error) {
     response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
