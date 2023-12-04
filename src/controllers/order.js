@@ -16,7 +16,7 @@ const getAllOrders = async (req, res) => {
       .limit(parseInt(req.query.pageSize) || 5);
     let response;
     if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
-    response = new HttpResponse(null, 1, 200, "Successfully", orders,Number(req.query.pageSize),Number(req.query.page),req.query.sort === 'DESC' ? -1 : 1,orders.length);
+    response = new HttpResponse(null, 1, 200, "Successfully", orders, Number(req.query.pageSize), Number(req.query.page), req.query.sort === 'DESC' ? -1 : 1, orders.length);
     return res.status(response.status).json(response);
   } catch (error) {
     response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
@@ -127,32 +127,53 @@ const postOrder = async (req, res) => {
 
 
 // Order length for using  Dashboard Chart - Start
-const getDashboard = async (req, res) => {
+// const getDashboard = async (req, res) => {
 
+//   try {
+//     let response;
+//     const orders = await OrderSchema.find();
+//     console.log(orders)
+
+//     if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null); else {
+//       const [processList, pendingList, deliveredList] = [
+//         orders.filter((e) => e.status === "Process"),
+//         orders.filter((e) => e.status === "Pending"),
+//         orders.filter((e) => e.status === "Delivered"),
+//       ];
+//       const dashboardList = [
+//         new Dashboard("Process", processList.length),
+//         new Dashboard("Pending", pendingList.length),
+//         new Dashboard("Delivered", deliveredList.length),
+//       ];
+//       response = new HttpResponse(null, 1, 200, "Successfully", dashboardList);
+//       return res.status(response.status).json(response);
+//     }
+//   } catch (error) {
+//     response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+//     return res.status(response.code).json(response);
+//   }
+// };
+const getDashboard = async (req, res) => {
   try {
-    let response;
     const orders = await OrderSchema.find();
-    console.log(orders)
-    
-    if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null); else {
-      const [processList, pendingList, deliveredList] = [
-        orders.filter((e) => e.status === "Process"),
-        orders.filter((e) => e.status === "Pending"),
-        orders.filter((e) => e.status === "Delivered"),
-      ];
-      const dashboardList = [
-        new Dashboard("Process", processList.length),
-        new Dashboard("Pending", pendingList.length),
-        new Dashboard("Delivered", deliveredList.length),
-      ];
-      response = new HttpResponse(null, 1, 200, "Successfully", dashboardList);
-      return res.status(response.status).json(response);
-    }
+    const [processList, pendingList, deliveredList] = [
+      orders.filter((e) => e.status === "Process"),
+      orders.filter((e) => e.status === "Pending"),
+      orders.filter((e) => e.status === "Delivered"),
+    ];
+    const dashboardList = [
+      { status: "Process", count: processList.length },
+      { status: "Pending", count: pendingList.length },
+      { status: "Delivered", count: deliveredList.length },
+    ];
+    return res.status(200).json(dashboardList);
   } catch (error) {
-    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
-    return res.status(response.code).json(response);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
-};
+}
+
+
+
 // Order length for using  Dashboard Chart - Close
 
 module.exports = {

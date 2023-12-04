@@ -7,7 +7,7 @@ const HttpResponse = require('../models/HttpResponse');
 // Get All Products Method
 const getAllProducts = async (req, res) => {
   try {
-    const products = await ProductSchema.find();
+    const products = await ProductSchema.find().exec();
     let response;
     if (products.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
     response = new HttpResponse(null, 1, 200, "Successfully", products);
