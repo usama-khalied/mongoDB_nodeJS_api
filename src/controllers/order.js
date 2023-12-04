@@ -128,9 +128,12 @@ const postOrder = async (req, res) => {
 
 // Order length for using  Dashboard Chart - Start
 const getDashboard = async (req, res) => {
+
   try {
     let response;
-    const orders = await OrderSchema.find({}).exec();
+    const orders = await OrderSchema.find();
+    console.log(orders)
+    
     if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null); else {
       const [processList, pendingList, deliveredList] = [
         orders.filter((e) => e.status === "Process"),
