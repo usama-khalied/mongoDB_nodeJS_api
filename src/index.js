@@ -13,7 +13,7 @@ const orderSetting = require('./routes/orderSeting');
 const productRoutes = require('./routes/product')
 const loginRoutes = require('./routes/login')
 const productSetting = require('./routes/productSetting');
-const dashboardRoutes = require('./routes/dashboard')
+
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -24,7 +24,7 @@ app.use(loginRoutes);
 app.use(productRoutes);
 app.use(orderSetting);
 app.use(productSetting);
-app.use(dashboardRoutes);
+
 
 app.use('/uploads',express.static('uploads'))
 app.listen(port,() => {

@@ -7,13 +7,17 @@ const HttpResponse = require('../models/HttpResponse');
 // Get All Products Method
 const getAllProducts = async (req, res) => {
   try {
-    const products = await ProductSchema.find().exec();
+    const products = await ProductSchema.find()
+        .sort({ createdAt: req.query.sort === 'DESC' ? -1 : 1 })
+        .skip(((parseInt(req.query.page) || 1) - 1) * (parseInt(req.query.pageSize) || 10))
+        .limit(parseInt(req.query.pageSize) || 5);
+
     let response;
-    if (products.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
-    response = new HttpResponse(null, 1, 200, "Successfully", products);
+    if (products.length < 1) response = new Pagination(null, 1, 404, "No record found", null);
+    response = new Pagination(null, 1, 200, "Successfully", products);
     return res.status(response.status).json(response);
   } catch (error) {
-    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    response = new Pagination(null, 0, 500, "Internal Server Error", null);
     return res.status(response.code).json(response);
   }
 }

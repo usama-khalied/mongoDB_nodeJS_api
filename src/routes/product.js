@@ -3,6 +3,7 @@ const routes = express.Router();
 const productControllers = require("../controllers/product");
 const uploadController = require("../middleware/upload");
 const verifyToken = require('../middleware/auth');
+const orderControllers = require("../controllers/order");
 
 routes.get("/Product/getAllProducts", productControllers.getAllProducts);
 routes.post(
@@ -12,5 +13,6 @@ routes.post(
 );
 routes.delete("/Product/del/:ProductCode",verifyToken, productControllers.deleteProduct);
 routes.get("/Product/:ProductCode",productControllers.dataById);
+
 
 module.exports = routes;

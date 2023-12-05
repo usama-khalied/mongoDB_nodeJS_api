@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const OrderSchema = mongoose.model("Orders", Order);
 const HttpResponse = require('../models/HttpResponse');
-
+const Pagination  = require('../models/Pagination')
 // 
 // Author Usama
 // 
@@ -15,11 +15,11 @@ const getAllOrders = async (req, res) => {
       .skip(((parseInt(req.query.page) || 1) - 1) * (parseInt(req.query.pageSize) || 10))
       .limit(parseInt(req.query.pageSize) || 5);
     let response;
-    if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
-    response = new HttpResponse(null, 1, 200, "Successfully", orders, Number(req.query.pageSize), Number(req.query.page), req.query.sort === 'DESC' ? -1 : 1, orders.length);
+    if (orders.length < 1) response = new Pagination(null, 1, 404, "No record found", null);
+    response = new Pagination(null, 1, 200, "Successfully", orders, Number(req.query.pageSize), Number(req.query.page), req.query.sort === 'DESC' ? -1 : 1, orders.length);
     return res.status(response.status).json(response);
   } catch (error) {
-    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    response = new Pagination(null, 0, 500, "Internal Server Error", null);
     return res.status(response.code).json(response);
   }
 }
@@ -126,51 +126,31 @@ const postOrder = async (req, res) => {
 
 
 
-// Order length for using  Dashboard Chart - Start
-// const getDashboard = async (req, res) => {
-
-//   try {
-//     let response;
-//     const orders = await OrderSchema.find();
-//     console.log(orders)
-
-//     if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null); else {
-//       const [processList, pendingList, deliveredList] = [
-//         orders.filter((e) => e.status === "Process"),
-//         orders.filter((e) => e.status === "Pending"),
-//         orders.filter((e) => e.status === "Delivered"),
-//       ];
-//       const dashboardList = [
-//         new Dashboard("Process", processList.length),
-//         new Dashboard("Pending", pendingList.length),
-//         new Dashboard("Delivered", deliveredList.length),
-//       ];
-//       response = new HttpResponse(null, 1, 200, "Successfully", dashboardList);
-//       return res.status(response.status).json(response);
-//     }
-//   } catch (error) {
-//     response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
-//     return res.status(response.code).json(response);
-//   }
-// };
 const getDashboard = async (req, res) => {
+
   try {
+    let response;
     const orders = await OrderSchema.find();
-    const [processList, pendingList, deliveredList] = [
-      orders.filter((e) => e.status === "Process"),
-      orders.filter((e) => e.status === "Pending"),
-      orders.filter((e) => e.status === "Delivered"),
-    ];
-    const dashboardList = [
-      { status: "Process", count: processList.length },
-      { status: "Pending", count: pendingList.length },
-      { status: "Delivered", count: deliveredList.length },
-    ];
-    return res.status(200).json(dashboardList);
+    if (orders.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null); else {
+      const [processList, pendingList, deliveredList] = [
+        orders.filter((e) => e.status === "Process"),
+        orders.filter((e) => e.status === "Pending"),
+        orders.filter((e) => e.status === "Delivered"),
+      ];
+      const dashboardList = [
+        new Dashboard("Process", processList.length),
+        new Dashboard("Pending", pendingList.length),
+        new Dashboard("Delivered", deliveredList.length),
+      ];
+      response = new HttpResponse(null, 1, 200, "Successfully", dashboardList);
+      return res.status(response.status).json(response);
+    }
   } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error" });
+    response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+    return res.status(response.code).json(response);
   }
-}
+};
+
 
 
 

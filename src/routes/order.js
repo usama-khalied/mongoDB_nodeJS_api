@@ -29,6 +29,6 @@ routes.get("/fetchOrder/:oid",verifyToken,orderControllers.getOrderById);
 // Get Order By OrderID using this route  - complet testing ✔✔✔
 routes.delete("/del/:oid",verifyToken,orderControllers.delByOrderId);
 
-
+routes.get('/getDashboard',orderControllers.getDashboard);
 
 module.exports = routes
