@@ -6,6 +6,7 @@ const HttpResponse = require('../models/HttpResponse');
 
 // Get All Products Method
 const getAllProducts = async (req, res) => {
+
   try {
     const products = await ProductSchema.find()
         .sort({ createdAt: req.query.sort === 'DESC' ? -1 : 1 })
