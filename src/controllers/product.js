@@ -3,6 +3,7 @@ const Product = require("../models/Product");
 const ProductSchema = mongoose.model("products", Product);
 const fs = require("fs");
 const HttpResponse = require('../models/HttpResponse');
+const Pagination = require('../models/Pagination')
 
 // Get All Products Method
 const getAllProducts = async (req, res) => {
@@ -23,12 +24,27 @@ const getAllProducts = async (req, res) => {
   }
 }
 
+// GET products for Home page
+
+const getProducts = async (req, res) => {
+
+    try {
+        const products = await ProductSchema.find()
+
+        let response;
+        if (products.length < 1) response = new HttpResponse(null, 1, 404, "No record found", null);
+        response = new HttpResponse(null, 1, 200, "Successfully", products);
+        return res.status(response.status).json(response);
+    } catch (error) {
+        response = new HttpResponse(null, 0, 500, "Internal Server Error", null);
+        return res.status(response.code).json(response);
+    }
+}
 
 
 //  Save or Update Method
 
 const postProduct = async (req, res) => {
-  console.log(res)
   try {
     const data = new ProductSchema({
       ProductName: req.body.ProductName,
@@ -129,6 +145,7 @@ const dataById = async (req, res) => {
   }
 }
 module.exports = {
+    getProducts,
   getAllProducts,
   postProduct,
   deleteProduct,
